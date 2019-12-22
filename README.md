@@ -1,6 +1,6 @@
 # ledburn
 
-Awesome LED Project
+Awesome animated LED structure project
 
 ```
 sudo apt-get install libportaudio2
@@ -9,6 +9,8 @@ pip3 install numpy sounddevice
 ```
 
 ## Animations
+
+Idea: we could dynamically change which frequency range we detect activity into based on what is most active in a given song so far.
 
 Animations concepts:
 - Concept of edges and vertices
