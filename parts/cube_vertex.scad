@@ -15,15 +15,17 @@ module edge()
         
         translate([0, 50, 37])
         rotate([90, 0, 0])
-        cylinder(r=2, h=100, $fn=100);
+        cylinder(r=2.25, h=100, $fn=100);
     }
 }
 
 module vertex()
 {
+    // Note that the edges are rotated so all screws can face the inside of the cube
+    // without any screws running into each other
     rotate([90, 0, 0]) edge();
     rotate([0, 90, 0]) edge();
-    edge();
+    rotate([0, 0, 90]) edge();
     
     // Make sure the inside of the corner is filled
     cube([24, 24, 24], center=true);
