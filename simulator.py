@@ -6,6 +6,18 @@ from pyglet.window import mouse
 import structure
 import animations
 
+
+def draw_struct(struct):
+    """
+    Draw a structure and its LEDs
+    """
+
+    pass
+
+
+
+
+
 window = pyglet.window.Window(
     width=800,
     height=600,

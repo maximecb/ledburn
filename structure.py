@@ -7,9 +7,10 @@ class Vertex:
 
     def __init__(self, pos):
         # Position of this vertex in 3D space
-        self.pos = pos
+        self.pos = np.array(pos)
 
-        pass
+        # Edges associated with this vertex
+        self.edges = []
 
 class Edge:
     def __init__(self, start, end, edge_idx, num_leds=60):
@@ -43,8 +44,37 @@ class Structure:
         # List of edges
         self.edges = []
 
-    def add_vertex():
+    def add_vertex(self, pos):
+        """
+        Add a new vertex to the structure
+        """
+
+        v = Vertex(pos)
+        self.verts.append(v)
+
+        # Return the new vertex
+        return v
+
+    def add_edge(self):
+        """
+        Add a new edge to the structure
+        """
+
+
+        # TODO:
+        # Return the new edge
         pass
 
-    def add_edge():
-        pass
+cube = Structure()
+
+# Bottom face
+cube.add_vertex([0, 0, 0])
+cube.add_vertex([1, 0, 0])
+cube.add_vertex([1, 0, 1])
+cube.add_vertex([0, 0, 1])
+
+# Top face
+cube.add_vertex([0, 1, 0])
+cube.add_vertex([1, 1, 0])
+cube.add_vertex([1, 1, 1])
+cube.add_vertex([0, 1, 1])
