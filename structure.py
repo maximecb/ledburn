@@ -69,24 +69,37 @@ class Structure:
         assert idx0 < len(self.verts)
         assert idx1 < len(self.verts)
 
+        edge = Edge(
+            start=self.verts[idx0],
+            end=self.verts[idx1],
+            edge_idx=len(self.edges),
+            num_leds=self.leds_per_edge
+        )
 
+        self.num_leds += edge.num_leds
 
-
-
-        # TODO:
         # Return the new edge
-        pass
+        return edge
 
 cube = Structure()
 
 # Bottom face (y=-1)
-cube.add_vertex([-1,-1,-1])
-cube.add_vertex([ 1,-1,-1])
-cube.add_vertex([ 1,-1, 1])
-cube.add_vertex([-1,-1, 1])
+cube.add_vertex([-1,-1,-1]) # 0
+cube.add_vertex([ 1,-1,-1]) # 1
+cube.add_vertex([ 1,-1, 1]) # 2
+cube.add_vertex([-1,-1, 1]) # 3
 
 # Top face (y=1)
-cube.add_vertex([-1, 1,-1])
-cube.add_vertex([ 1, 1,-1])
-cube.add_vertex([ 1, 1, 1])
-cube.add_vertex([-1, 1, 1])
+cube.add_vertex([-1, 1,-1]) # 4
+cube.add_vertex([ 1, 1,-1]) # 5
+cube.add_vertex([ 1, 1, 1]) # 6
+cube.add_vertex([-1, 1, 1]) # 7
+
+# Bottom face edges
+cube.add_edge(0, 1)
+cube.add_edge(1, 2)
+cube.add_edge(2, 3)
+cube.add_edge(3, 4)
+
+# Top face edges
+#

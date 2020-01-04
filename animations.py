@@ -42,3 +42,11 @@ class BasicStrobe:
 
 # IDEA: selectively flash a subset of the edges in white or red
 # Ideally there should be some symmetry in the edge patterns
+
+# Other animation ideas
+# - Colored strobe
+# - Positional strobe (based on distance to a point)
+# - Shooting star, random direction change at vertex
+# - Blood drops
+# - Point light rotating around the cube, direction changes with the beat
+# - Standing waves to the beat
