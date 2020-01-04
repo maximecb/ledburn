@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import time
 import argparse
 import pyglet
@@ -14,6 +16,9 @@ window = pyglet.window.Window(
 )
 
 anim = animations.BasicStrobe()
+
+# Allocate a tensor for the RGB pixel values
+pixels = structure.cube.alloc_pixels()
 
 # Time when the last beat occurred
 last_beat = 0
@@ -90,6 +95,8 @@ def draw_struct(struct):
 def update(dt):
     global last_beat
 
+    # TODO: add some randomness and frequency change over time
+    # to the simulated beat
     t = time.time()
 
     if t - last_beat > 0.5:

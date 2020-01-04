@@ -49,6 +49,18 @@ class Structure:
 
         # TODO:
         # Ability to rotate the whole structure, rotation angles for XYZ
+        # This will rotate the positions of all vertices
+
+    def alloc_pixels(self):
+        """
+        Allocate a numpy tensor for the RGB pixels
+        The shape of the tensor is (edges, leds, channels)
+        """
+
+        return np.zeros(
+            shape=(len(self.edges), self.leds_per_edge, 3),
+            dtype=np.float32
+        )
 
     def add_vertex(self, pos):
         """

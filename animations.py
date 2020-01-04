@@ -14,19 +14,25 @@ class Animation:
     def __init__(self):
         pass
 
+    def pulse(self):
+        """
+        Called when a beat or notable audio change occurs
+        Note: some animations may choose not to implement this method
+        """
+        pass
+
     def update(self):
         """
         Called at a regular interval to update the animation
         """
-
         raise NotImplementedError
 
-    def pulse(self):
+    def render(self, pixels):
         """
-        Called when a beat or notable audio change occurs
+        Produce RGB LED pixel values for this animation
+        :param pixels numpy array into which the values will be stored
         """
-
-        pass
+        raise NotImplementedError
 
 class BasicStrobe(Animation):
     """
@@ -36,11 +42,14 @@ class BasicStrobe(Animation):
     def __init__(self):
         super().__init__()
 
+    def pulse(self):
+        pass
+
     def update(self):
         # TODO
         pass
 
-    def pulse(self):
+    def render(self, pixels):
         pass
 
 # IDEA: selectively flash a subset of the edges in white or red
