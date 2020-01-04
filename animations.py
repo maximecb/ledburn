@@ -39,3 +39,6 @@ class BasicStrobe:
     def update(self):
         # TODO
         pass
+
+# IDEA: selectively flash a subset of the edges in white or red
+# Ideally there should be some symmetry in the edge patterns

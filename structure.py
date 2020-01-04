@@ -44,6 +44,12 @@ class Structure:
         # List of edges
         self.edges = []
 
+        # Total number of LEDs in the structure
+        self.num_leds = 0
+
+        # TODO:
+        # Ability to rotate the whole structure, rotation angles for XYZ
+
     def add_vertex(self, pos):
         """
         Add a new vertex to the structure
@@ -55,10 +61,16 @@ class Structure:
         # Return the new vertex
         return v
 
-    def add_edge(self):
+    def add_edge(self, idx0, idx1):
         """
         Add a new edge to the structure
         """
+
+        assert idx0 < len(self.verts)
+        assert idx1 < len(self.verts)
+
+
+
 
 
         # TODO:
@@ -67,14 +79,14 @@ class Structure:
 
 cube = Structure()
 
-# Bottom face
-cube.add_vertex([0, 0, 0])
-cube.add_vertex([1, 0, 0])
-cube.add_vertex([1, 0, 1])
-cube.add_vertex([0, 0, 1])
+# Bottom face (y=-1)
+cube.add_vertex([-1,-1,-1])
+cube.add_vertex([ 1,-1,-1])
+cube.add_vertex([ 1,-1, 1])
+cube.add_vertex([-1,-1, 1])
 
-# Top face
-cube.add_vertex([0, 1, 0])
-cube.add_vertex([1, 1, 0])
-cube.add_vertex([1, 1, 1])
-cube.add_vertex([0, 1, 1])
+# Top face (y=1)
+cube.add_vertex([-1, 1,-1])
+cube.add_vertex([ 1, 1,-1])
+cube.add_vertex([ 1, 1, 1])
+cube.add_vertex([-1, 1, 1])

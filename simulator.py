@@ -6,14 +6,32 @@ from pyglet.window import mouse
 import structure
 import animations
 
-
 def draw_struct(struct):
     """
     Draw a structure and its LEDs
+    Note: we define the drawing code here because we don't want to import
+    the pyglet dependencies in the rest of the code.
     """
 
-    pass
+    """
+    glBegin(GL_TRIANGLES)
+    glVertex3f(0, 0, -4)
+    glVertex3f(1, 1, -4)
+    glVertex3f(1, 0, -4)
+    glEnd()
+    """
 
+    glColor3f(1, 1, 1)
+    glPointSize(2)
+
+    glBegin(GL_POINTS)
+    for vert in struct.verts:
+        glVertex3f(*vert.pos)
+    glEnd(GL_POINTS)
+
+
+    for edge in struct.edges:
+        pass
 
 
 
@@ -51,31 +69,27 @@ def on_draw():
     gluLookAt(
         0, # Camera x
         2, # Camera y
-        0, # Camera z
+        4, # Camera z
         0, # Look at x
         0, # Look at y
-        -4, # Look at z
+        0, # Look at z
         0,
         1,
         0
     )
 
-
-
-
-
-    glBegin(GL_TRIANGLES)
-    glVertex3f(0, 0, -4)
-    glVertex3f(1, 1, -4)
-    glVertex3f(1, 0, -4)
-    glEnd()
-
-
-
-
+    draw_struct(structure.cube)
 
 def update(dt):
+    # IDEA: start by simulating a regular beat at some interval
+
     pass
+
+
+
+
+
+
 
 pyglet.clock.schedule_interval(update, animations.UPDATE_TIME)
 
