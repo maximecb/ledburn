@@ -76,6 +76,7 @@ class Structure:
             num_leds=self.leds_per_edge
         )
 
+        self.edges.append(edge)
         self.num_leds += edge.num_leds
 
         # Return the new edge
@@ -99,7 +100,16 @@ cube.add_vertex([-1, 1, 1]) # 7
 cube.add_edge(0, 1)
 cube.add_edge(1, 2)
 cube.add_edge(2, 3)
-cube.add_edge(3, 4)
+cube.add_edge(3, 0)
 
 # Top face edges
-#
+cube.add_edge(4, 5)
+cube.add_edge(5, 6)
+cube.add_edge(6, 7)
+cube.add_edge(7, 4)
+
+# Connect bottom to top
+cube.add_edge(0, 4)
+cube.add_edge(1, 5)
+cube.add_edge(2, 6)
+cube.add_edge(3, 7)

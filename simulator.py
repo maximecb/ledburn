@@ -22,19 +22,20 @@ def draw_struct(struct):
     """
 
     glColor3f(1, 1, 1)
-    glPointSize(2)
-
+    glPointSize(5)
     glBegin(GL_POINTS)
     for vert in struct.verts:
         glVertex3f(*vert.pos)
     glEnd(GL_POINTS)
 
-
+    glColor3f(0.2, 0.2, 0.2)
+    glBegin(GL_LINES)
     for edge in struct.edges:
-        pass
-
-
-
+        p0 = edge.start.pos
+        p1 = edge.end.pos
+        glVertex3f(*p0)
+        glVertex3f(*p1)
+    glEnd(GL_LINES)
 
 window = pyglet.window.Window(
     width=800,
