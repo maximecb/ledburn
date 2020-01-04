@@ -1,3 +1,4 @@
+import time
 import argparse
 import pyglet
 from pyglet.gl import *
@@ -6,42 +7,16 @@ from pyglet.window import mouse
 import structure
 import animations
 
-def draw_struct(struct):
-    """
-    Draw a structure and its LEDs
-    Note: we define the drawing code here because we don't want to import
-    the pyglet dependencies in the rest of the code.
-    """
-
-    """
-    glBegin(GL_TRIANGLES)
-    glVertex3f(0, 0, -4)
-    glVertex3f(1, 1, -4)
-    glVertex3f(1, 0, -4)
-    glEnd()
-    """
-
-    glColor3f(1, 1, 1)
-    glPointSize(5)
-    glBegin(GL_POINTS)
-    for vert in struct.verts:
-        glVertex3f(*vert.pos)
-    glEnd(GL_POINTS)
-
-    glColor3f(0.2, 0.2, 0.2)
-    glBegin(GL_LINES)
-    for edge in struct.edges:
-        p0 = edge.start.pos
-        p1 = edge.end.pos
-        glVertex3f(*p0)
-        glVertex3f(*p1)
-    glEnd(GL_LINES)
-
 window = pyglet.window.Window(
     width=800,
     height=600,
     caption='LEDBurn Simulator'
 )
+
+anim = animations.BasicStrobe()
+
+# Time when the last beat occurred
+last_beat = 0
 
 @window.event
 def on_key_press(symbol, modifiers):
@@ -81,14 +56,55 @@ def on_draw():
 
     draw_struct(structure.cube)
 
+def draw_struct(struct):
+    """
+    Draw a structure and its LEDs
+    Note: we define the drawing code here because we don't want to import
+    the pyglet dependencies in the rest of the code.
+    """
+
+    """
+    glBegin(GL_TRIANGLES)
+    glVertex3f(0, 0, -4)
+    glVertex3f(1, 1, -4)
+    glVertex3f(1, 0, -4)
+    glEnd()
+    """
+
+    glColor3f(1, 1, 1)
+    glPointSize(5)
+    glBegin(GL_POINTS)
+    for vert in struct.verts:
+        glVertex3f(*vert.pos)
+    glEnd(GL_POINTS)
+
+    glColor3f(0.2, 0.2, 0.2)
+    glBegin(GL_LINES)
+    for edge in struct.edges:
+        p0 = edge.start.pos
+        p1 = edge.end.pos
+        glVertex3f(*p0)
+        glVertex3f(*p1)
+    glEnd(GL_LINES)
+
 def update(dt):
-    # IDEA: start by simulating a regular beat at some interval
+    global last_beat
 
-    pass
+    t = time.time()
+
+    if t - last_beat > 0.5:
+        last_beat = t
+        anim.pulse()
+        print('Pulse!')
+
+    anim.update()
 
 
+# TODO: function in the structure to instantiate a numpy array of colors
+# should have dimensions (edges, leds, channels)
+# we should operate in floating-point format until we need to draw
 
-
+# TODO: start by just drawing OpenGL points for the LEDs
 
 
 

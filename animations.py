@@ -28,9 +28,9 @@ class Animation:
 
         pass
 
-class BasicStrobe:
+class BasicStrobe(Animation):
     """
-    Basic on-off strobe light that doesn't react to the beat
+    Basic strobe light that pulses to the beat
     """
 
     def __init__(self):
@@ -38,6 +38,9 @@ class BasicStrobe:
 
     def update(self):
         # TODO
+        pass
+
+    def pulse(self):
         pass
 
 # IDEA: selectively flash a subset of the edges in white or red
