@@ -7,7 +7,7 @@ class Vertex:
 
     def __init__(self, pos):
         # Position of this vertex in 3D space
-        self.pos = np.array(pos)
+        self.pos = np.array(pos, dtype=np.float32)
 
         # Edges associated with this vertex
         self.edges = []
@@ -47,21 +47,6 @@ class Structure:
         # Total number of LEDs in the structure
         self.num_leds = 0
 
-        # TODO:
-        # Ability to rotate the whole structure, rotation angles for XYZ
-        # This will rotate the positions of all vertices
-
-    def alloc_pixels(self):
-        """
-        Allocate a numpy tensor for the RGB pixels
-        The shape of the tensor is (edges, leds, channels)
-        """
-
-        return np.zeros(
-            shape=(len(self.edges), self.leds_per_edge, 3),
-            dtype=np.float32
-        )
-
     def add_vertex(self, pos):
         """
         Add a new vertex to the structure
@@ -94,6 +79,46 @@ class Structure:
         # Return the new edge
         return edge
 
+    def scale(self, s):
+        """
+        Re-scale the vertex position according to some scale factor
+        """
+
+        for vert in self.verts:
+            vert.pos *= s
+
+    # TODO:
+    # Method to rotate the structure around the origin
+    # This will rotate the positions of all vertices
+    def rotate(self, axis, angle):
+        assert False
+
+    def finalize(self):
+        """
+        Called once all vertices and edges are added
+        """
+
+        # Allocate an array for the LED RGB pixels
+        self.pixels = np.zeros(
+            shape=(len(self.edges), self.leds_per_edge, 3),
+            dtype=np.float32
+        )
+
+        # Allocate an array for the LED positions in 3D space
+        self.poss = np.zeros(
+            shape=(len(self.edges), self.leds_per_edge, 3),
+            dtype=np.float32
+        )
+
+        # Compute the position of each LED
+        for edge_idx, edge in enumerate(self.edges):
+            p0 = edge.start.pos
+            p1 = edge.end.pos
+            for led_idx in range(edge.num_leds):
+                f = (led_idx + 0.5) / edge.num_leds
+                p = (1 - f) * p0 + f * p1
+                self.poss[edge_idx, led_idx, :] = p
+
 cube = Structure()
 
 # Bottom face (y=-1)
@@ -125,3 +150,7 @@ cube.add_edge(0, 4)
 cube.add_edge(1, 5)
 cube.add_edge(2, 6)
 cube.add_edge(3, 7)
+
+cube.scale(0.5)
+#cube.rotate()
+cube.finalize()

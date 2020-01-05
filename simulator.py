@@ -15,10 +15,7 @@ window = pyglet.window.Window(
     caption='LEDBurn Simulator'
 )
 
-anim = animations.BasicStrobe()
-
-# Allocate a tensor for the RGB pixel values
-pixels = structure.cube.alloc_pixels()
+anim = animations.BasicStrobe(structure.cube)
 
 # Time when the last beat occurred
 last_beat = 0
@@ -49,8 +46,8 @@ def on_draw():
     glLoadIdentity()
     gluLookAt(
         0, # Camera x
-        2, # Camera y
-        4, # Camera z
+        1, # Camera y
+        2, # Camera z
         0, # Look at x
         0, # Look at y
         0, # Look at z
@@ -66,14 +63,6 @@ def draw_struct(struct):
     Draw a structure and its LEDs
     Note: we define the drawing code here because we don't want to import
     the pyglet dependencies in the rest of the code.
-    """
-
-    """
-    glBegin(GL_TRIANGLES)
-    glVertex3f(0, 0, -4)
-    glVertex3f(1, 1, -4)
-    glVertex3f(1, 0, -4)
-    glEnd()
     """
 
     glColor3f(1, 1, 1)
@@ -92,6 +81,24 @@ def draw_struct(struct):
         glVertex3f(*p1)
     glEnd(GL_LINES)
 
+    struct = structure.cube
+    pixels = struct.pixels
+    poss = struct.poss
+
+    # TODO: draw colored OpenGL points for the LEDs
+    glColor3f(1, 1, 1)
+    glPointSize(2)
+    glBegin(GL_POINTS)
+
+    for edge_idx in range(pixels.shape[0]):
+        for led_idx in range(pixels.shape[1]):
+            c = pixels[edge_idx, led_idx]
+            p = poss[edge_idx, led_idx]
+            glColor3f(*c)
+            glVertex3f(*p)
+
+    glEnd(GL_POINTS)
+
 def update(dt):
     global last_beat
 
@@ -101,19 +108,10 @@ def update(dt):
 
     if t - last_beat > 0.5:
         last_beat = t
-        anim.pulse()
-        print('Pulse!')
+        anim.pulse(t)
+        print('Pulse!', t)
 
-    anim.update()
-
-
-# TODO: function in the structure to instantiate a numpy array of colors
-# should have dimensions (edges, leds, channels)
-# we should operate in floating-point format until we need to draw
-
-# TODO: start by just drawing OpenGL points for the LEDs
-
-
+    anim.update(t)
 
 pyglet.clock.schedule_interval(update, animations.UPDATE_TIME)
 
