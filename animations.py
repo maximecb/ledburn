@@ -48,6 +48,44 @@ class BasicStrobe(Animation):
         color = np.array([1, 1, 1]) * brightness
         self.struct.pixels[:, :] = color
 
+class PosiStrobe(Animation):
+    """
+    Simple positional strobe effect
+    """
+
+    def __init__(self, struct):
+        super().__init__(struct)
+
+        self.pulse_time = 0
+        self.pos = np.array([0, 0, 0])
+
+    def pulse(self, t):
+        self.pulse_time = t
+
+        # TODO: method to compute min/max cube extents or
+        # sample point around structure
+        self.pos = np.random.uniform(
+            np.array([-0.5, -0.5, -0.5]),
+            np.array([0.5, 0.5, 0.5])
+        )
+
+    def update(self, t):
+
+        dist = self.struct.poss - self.pos
+        dist = np.linalg.norm(dist, axis=-1)
+        dist = np.expand_dims(dist, -1)
+        print(dist.min(), dist.max())
+
+        print(dist.shape)
+
+        dt = t - self.pulse_time
+        brightness = math.pow(0.94, 100 * dt)
+        color = np.array([1, 0, 0]) * brightness / (dist*dist)
+
+        print(color.shape)
+
+        self.struct.pixels = color
+
 # TODO: Colored, positional strobe
 # Pick a random position inside the cube
 

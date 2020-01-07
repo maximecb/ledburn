@@ -15,7 +15,8 @@ window = pyglet.window.Window(
     caption='LEDBurn Simulator'
 )
 
-anim = animations.BasicStrobe(structure.cube)
+#anim = animations.BasicStrobe(structure.cube)
+anim = animations.PosiStrobe(structure.cube)
 
 # Time when the last beat occurred
 last_beat = 0
@@ -99,8 +100,13 @@ def draw_struct(struct):
 
     glEnd(GL_POINTS)
 
+
 def update(dt):
     global last_beat
+
+    # TODO: mechnism to switch between a random list of animations
+    # We also want to avoid repeats
+    # Probably want some kind of Sequencer class in animations.py, or sequencer.py
 
     # TODO: add some randomness and frequency change over time
     # to the simulated beat
