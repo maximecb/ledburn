@@ -16,7 +16,8 @@ window = pyglet.window.Window(
 )
 
 #anim = animations.BasicStrobe(structure.cube)
-anim = animations.PosiStrobe(structure.cube)
+#anim = animations.PosiStrobe(structure.cube)
+anim = animations.TestSequence(structure.cube)
 
 # Time when the last beat occurred
 last_beat = 0

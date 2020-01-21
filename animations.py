@@ -86,11 +86,43 @@ class PosiStrobe(Animation):
 
         self.struct.pixels = color
 
-# TODO: Colored, positional strobe
-# Pick a random position inside the cube
+class TestSequence(Animation):
+    """
+    Test sequence. This is used to help us connect the
+    LED strips in the correct order on the physical cube.
+    """
+
+    def __init__(self, struct):
+        super().__init__(struct)
+
+        self.edge_idx = 0
+
+        self.led_idx = 0
+
+    def update(self, t):
+        # TODO: flash on first segment
+        # We can add this later
+
+        # Should have directional movement
+        # Start with just going from one edge to another and iterating through the LEDs,
+        # in order
+
+        edge = self.struct.edges[self.edge_idx]
+
+        self.led_idx += 1
+
+        if self.led_idx >= edge.num_leds:
+            self.edge_idx = (self.edge_idx + 1) % len(self.struct.edges)
+            self.led_idx = 0
+
+        self.struct.pixels[:, :] = 0
+        self.struct.pixels[self.edge_idx, self.led_idx, 0] = 1
+
+
 
 # IDEA: selectively flash a subset of the edges in white or red
 # Ideally there should be some symmetry in the edge patterns
+# IDEA: multi-flash pattern that changes to the beat
 
 # Other animation ideas
 # - Colored strobe

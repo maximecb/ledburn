@@ -146,9 +146,9 @@ cube.add_edge(6, 7)
 cube.add_edge(7, 4)
 
 # Connect bottom to top
-cube.add_edge(0, 4)
+cube.add_edge(4, 0)
 cube.add_edge(1, 5)
-cube.add_edge(2, 6)
+cube.add_edge(6, 2)
 cube.add_edge(3, 7)
 
 cube.scale(0.5)
