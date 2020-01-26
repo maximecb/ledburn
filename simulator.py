@@ -105,6 +105,10 @@ def draw_struct(struct):
 def update(dt):
     global last_beat
 
+    bpm = 120
+    beats_per_sec = bpm / 60
+    secs_per_beat = 1 / beats_per_sec
+
     # TODO: mechnism to switch between a random list of animations
     # We also want to avoid repeats
     # Probably want some kind of Sequencer class in animations.py, or sequencer.py
@@ -113,10 +117,10 @@ def update(dt):
     # to the simulated beat
     t = time.time()
 
-    if t - last_beat > 0.5:
+    if t - last_beat > secs_per_beat:
         last_beat = t
         anim.pulse(t)
-        print('Pulse!', t)
+        print('Pulse! tempo={:.1f} t={:.1f}'.format(bpm, t))
 
     anim.update(t)
 

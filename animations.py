@@ -118,7 +118,9 @@ class TestSequence(Animation):
         self.struct.pixels[:, :] = 0
         self.struct.pixels[self.edge_idx, self.led_idx, 0] = 1
 
+# TODO: function to pick a random animation (except TestSequence)
 
+# IDEA: randomly pick one edge to flash
 
 # IDEA: selectively flash a subset of the edges in white or red
 # Ideally there should be some symmetry in the edge patterns
