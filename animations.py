@@ -1,4 +1,5 @@
 import math
+import random
 import numpy as np
 
 # Frequency at which animations are updated
@@ -70,19 +71,13 @@ class PosiStrobe(Animation):
         )
 
     def update(self, t):
-
         dist = self.struct.poss - self.pos
         dist = np.linalg.norm(dist, axis=-1)
         dist = np.expand_dims(dist, -1)
-        print(dist.min(), dist.max())
-
-        print(dist.shape)
 
         dt = t - self.pulse_time
         brightness = math.pow(0.94, 100 * dt)
         color = np.array([1, 0, 0]) * brightness / (dist*dist)
-
-        print(color.shape)
 
         self.struct.pixels = color
 
@@ -118,8 +113,6 @@ class TestSequence(Animation):
         self.struct.pixels[:, :] = 0
         self.struct.pixels[self.edge_idx, self.led_idx, 0] = 1
 
-# TODO: function to pick a random animation (except TestSequence)
-
 # IDEA: randomly pick one edge to flash
 
 # IDEA: selectively flash a subset of the edges in white or red
@@ -133,3 +126,34 @@ class TestSequence(Animation):
 # - Blood drops
 # - Point light rotating around the cube, direction changes with the beat
 # - Standing waves to the beat
+
+def reg_animations():
+    import inspect
+
+    animations = []
+
+    global_vars = globals()
+
+    # Iterate through global names
+    for global_name in sorted(list(global_vars.keys())):
+        anim_class = global_vars[global_name]
+
+        if not inspect.isclass(anim_class):
+            continue
+
+        if not issubclass(anim_class, Animation):
+            continue
+
+        if anim_class is Animation or anim_class is TestSequence:
+            continue
+
+        animations.append(anim_class)
+
+    return animations
+
+def random_animation(struct):
+    anim_class = random.choice(animations)
+    return anim_class(struct)
+
+# List of animations we can pick from
+animations = reg_animations()

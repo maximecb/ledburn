@@ -2,6 +2,7 @@
 
 import time
 import argparse
+import math
 import pyglet
 from pyglet.gl import *
 from pyglet.window import key
@@ -19,8 +20,11 @@ window = pyglet.window.Window(
 #anim = animations.PosiStrobe(structure.cube)
 anim = animations.TestSequence(structure.cube)
 
-# Time when the last beat occurred
-last_beat = 0
+# Time when the next beat should occur
+next_beat = 0
+
+# Number of beats so far
+num_beats = 0
 
 @window.event
 def on_key_press(symbol, modifiers):
@@ -103,26 +107,34 @@ def draw_struct(struct):
 
 
 def update(dt):
-    global last_beat
+    global anim
+    global next_beat
+    global num_beats
 
-    bpm = 120
+    # Get the current time in seconds
+    t = time.time()
+
+    # Slowly vary the tempo over time so we can test animations more robustly
+    bpm = 120 + 30 * math.sin(t / 40)
     beats_per_sec = bpm / 60
     secs_per_beat = 1 / beats_per_sec
 
-    # TODO: mechnism to switch between a random list of animations
-    # We also want to avoid repeats
-    # Probably want some kind of Sequencer class in animations.py, or sequencer.py
+    # If it's time for the next beat
+    if t > next_beat:
+        if num_beats % 5 < 2:
+            next_beat = t + secs_per_beat / 2
+        else:
+            next_beat = t + secs_per_beat
 
-    # TODO: add some randomness and frequency change over time
-    # to the simulated beat
-    t = time.time()
-
-    if t - last_beat > secs_per_beat:
-        last_beat = t
         anim.pulse(t)
-        print('Pulse! tempo={:.1f} t={:.1f}'.format(bpm, t))
+        print('Pulse! #{} tempo={:.1f} t={:.1f}'.format(num_beats, bpm, t))
+        num_beats += 1
 
     anim.update(t)
+
+    # Randomly pick the next animation
+    if num_beats % 20 == 0:
+        anim = animations.random_animation(structure.cube)
 
 pyglet.clock.schedule_interval(update, animations.UPDATE_TIME)
 
