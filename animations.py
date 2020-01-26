@@ -81,6 +81,41 @@ class PosiStrobe(Animation):
 
         self.struct.pixels = color
 
+class TestAnimation(Animation):
+
+    def __init__(self, struct):
+        super().__init__(struct)
+
+        self.pulse_time = 0
+        self.pos = np.random.uniform(
+            np.array([-0.5, -0.5, -0.5]),
+            np.array([0.5, 0.5, 0.5])
+        )
+
+    def pulse(self, t):
+        self.pulse_time = t
+        green = np.array([0,1,0])
+        blue = np.array([0,0,1])
+        red = np.array([1,0,0])
+        yellow = np.array([1,1,0])
+        cyan = np.array([0,1,1])
+        magenta = np.array([1,0,1])
+        colors = [blue, cyan, magenta]
+        color = colors[np.random.randint(0,4)]
+        self.struct.pixels[:,:] = color
+
+
+    def update(self, t):
+        dist = self.struct.poss - self.pos
+        dist = np.linalg.norm(dist, axis=-1)
+        dist = np.expand_dims(dist, -1)
+        dt = t - self.pulse_time
+        brightness = math.pow(0.94, 100 * dt)
+        color = np.array([.5,1,1]) * brightness
+
+        self.struct.pixels[:,:] *= brightness
+
+
 class TestSequence(Animation):
     """
     Test sequence. This is used to help us connect the
