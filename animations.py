@@ -206,12 +206,29 @@ class RotoStrobe(Animation):
 
         self.struct.pixels = color
 
+class BloodDrops(Animation):
+    """
+    Blood drops
+    """
+
+    def __init__(self, struct):
+        super().__init__(struct)
+        self.pulse_time = 0
+        red = np.array([1,0,0])
+
+    def pulse(self, t):
+        pass
+
+    def update(self, t):
+        pass
+
+
+
+
 # IDEA: selectively flash a subset of the edges in white or red
 # Ideally there should be some symmetry in the edge patterns
 
 # Other animation ideas
-# - Colored strobe
-# - Positional strobe (based on distance to a point)
 # - Shooting star, random direction change at vertex
 # - Blood drops
 # - Standing waves to the beat

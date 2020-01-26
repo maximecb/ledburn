@@ -107,6 +107,12 @@ class Structure:
         for vert in self.verts:
             vert.pos = np.matmul(vert.pos, m)
 
+    def extents(self):
+        x_sorted = sorted(self.verts, key = lambda v: v.pos[0])
+        y_sorted = sorted(self.verts, key = lambda v: v.pos[1])
+        z_sorted = sorted(self.verts, key = lambda v: v.pos[2])
+        return x_sorted[0].pos[0], x_sorted[-1].pos[0], y_sorted[0].pos[1], y_sorted[-1].pos[1], z_sorted[0].pos[2], z_sorted[-1].pos[2]
+
     def finalize(self):
         """
         Called once all vertices and edges are added
