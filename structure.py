@@ -47,6 +47,10 @@ class Structure:
         # Total number of LEDs in the structure
         self.num_leds = 0
 
+    @property
+    def num_edges(self):
+        return len(self.edges)
+
     def add_vertex(self, pos):
         """
         Add a new vertex to the structure

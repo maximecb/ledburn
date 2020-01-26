@@ -16,8 +16,6 @@ window = pyglet.window.Window(
     caption='LEDBurn Simulator'
 )
 
-#anim = animations.BasicStrobe(structure.cube)
-#anim = animations.PosiStrobe(structure.cube)
 anim = animations.TestSequence(structure.cube)
 
 # Time when the next beat should occur
