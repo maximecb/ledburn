@@ -30,6 +30,38 @@ class Animation:
         """
         raise NotImplementedError
 
+class TestSequence(Animation):
+    """
+    Test sequence. This is used to help us connect the
+    LED strips in the correct order on the physical cube.
+    """
+
+    def __init__(self, struct):
+        super().__init__(struct)
+
+        self.edge_idx = 0
+
+        self.led_idx = 0
+
+    def update(self, t):
+        # TODO: flash on first segment
+        # We can add this later
+
+        # Should have directional movement
+        # Start with just going from one edge to another and iterating through the LEDs,
+        # in order
+
+        edge = self.struct.edges[self.edge_idx]
+
+        self.led_idx += 1
+
+        if self.led_idx >= edge.num_leds:
+            self.edge_idx = (self.edge_idx + 1) % len(self.struct.edges)
+            self.led_idx = 0
+
+        self.struct.pixels[:, :] = 0
+        self.struct.pixels[self.edge_idx, self.led_idx, 0] = 1
+
 class BasicStrobe(Animation):
     """
     Basic strobe light that pulses to the beat
@@ -116,39 +148,27 @@ class TestAnimation(Animation):
         self.struct.pixels[:,:] *= brightness
 
 
-class TestSequence(Animation):
+class EdgeStrobe(Animation):
     """
-    Test sequence. This is used to help us connect the
-    LED strips in the correct order on the physical cube.
+    Randomly flash one edge of the cube at a time
     """
 
     def __init__(self, struct):
         super().__init__(struct)
 
-        self.edge_idx = 0
+        self.cur_edge = 0
+        self.pulse_time = 0
 
-        self.led_idx = 0
+    def pulse(self, t):
+        self.cur_edge = np.random.randint(0, self.struct.num_edges)
+        self.pulse_time = t
+        self.struct.pixels[:, :, :] = 0
 
     def update(self, t):
-        # TODO: flash on first segment
-        # We can add this later
-
-        # Should have directional movement
-        # Start with just going from one edge to another and iterating through the LEDs,
-        # in order
-
-        edge = self.struct.edges[self.edge_idx]
-
-        self.led_idx += 1
-
-        if self.led_idx >= edge.num_leds:
-            self.edge_idx = (self.edge_idx + 1) % len(self.struct.edges)
-            self.led_idx = 0
-
-        self.struct.pixels[:, :] = 0
-        self.struct.pixels[self.edge_idx, self.led_idx, 0] = 1
-
-# IDEA: randomly pick one edge to flash
+        dt = t - self.pulse_time
+        brightness = math.pow(0.94, 100 * dt)
+        color = np.array([1, 1, 1]) * brightness
+        self.struct.pixels[self.cur_edge, :] = color
 
 # IDEA: selectively flash a subset of the edges in white or red
 # Ideally there should be some symmetry in the edge patterns

@@ -1,4 +1,23 @@
+import math
 import numpy as np
+
+def rot_matrix(axis, theta):
+    """
+    Return the rotation matrix associated with counterclockwise rotation about
+    the given axis by theta radians.
+    """
+    axis = np.asarray(axis)
+    axis = axis / math.sqrt(np.dot(axis, axis))
+    a = math.cos(theta / 2.0)
+    b, c, d = -axis * math.sin(theta / 2.0)
+    aa, bb, cc, dd = a * a, b * b, c * c, d * d
+    bc, ad, ac, ab, bd, cd = b * c, a * d, a * c, a * b, b * d, c * d
+
+    return np.array([
+        [aa + bb - cc - dd, 2 * (bc + ad), 2 * (bd - ac)],
+        [2 * (bc - ad), aa + cc - bb - dd, 2 * (cd + ab)],
+        [2 * (bd + ac), 2 * (cd - ab), aa + dd - bb - cc]
+    ])
 
 class Vertex:
     """
@@ -47,6 +66,16 @@ class Structure:
         # Total number of LEDs in the structure
         self.num_leds = 0
 
+        # NumPy array, RGB color of each pixel (num_edges, leds_per_edge, 3)
+        self.pixels = None
+
+        # NumPy array, XYZ position of every LED (num_edges, leds_per_edge, 3)
+        self.poss = None
+
+    @property
+    def num_edges(self):
+        return len(self.edges)
+
     def add_vertex(self, pos):
         """
         Add a new vertex to the structure
@@ -87,11 +116,13 @@ class Structure:
         for vert in self.verts:
             vert.pos *= s
 
-    # TODO:
     # Method to rotate the structure around the origin
     # This will rotate the positions of all vertices
     def rotate(self, axis, angle):
-        assert False
+        m = rot_matrix(axis, angle)
+
+        for vert in self.verts:
+            vert.pos = np.matmul(vert.pos, m)
 
     def finalize(self):
         """
@@ -106,7 +137,7 @@ class Structure:
 
         # Allocate an array for the LED positions in 3D space
         self.poss = np.zeros(
-            shape=(len(self.edges), self.leds_per_edge, 3),
+            shape=(self.num_edges, self.leds_per_edge, 3),
             dtype=np.float32
         )
 
@@ -152,5 +183,6 @@ cube.add_edge(6, 2)
 cube.add_edge(3, 7)
 
 cube.scale(0.5)
-#cube.rotate()
+#cube.rotate([1, 0, 0], math.pi / 4)
+#cube.rotate([0, 1, 0], math.pi / 4)
 cube.finalize()
