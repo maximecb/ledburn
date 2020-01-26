@@ -113,8 +113,10 @@ class PosiStrobe(Animation):
 
         self.struct.pixels = color
 
-class TestAnimation(Animation):
-
+class ColoredPosiStrobe(Animation):
+    """
+    Colored positional strobe effect
+    """
     def __init__(self, struct):
         super().__init__(struct)
 
@@ -133,7 +135,7 @@ class TestAnimation(Animation):
         cyan = np.array([0,1,1])
         magenta = np.array([1,0,1])
         colors = [blue, cyan, magenta]
-        color = colors[np.random.randint(0,4)]
+        color = colors[np.random.randint(0,3)]
         self.struct.pixels[:,:] = color
 
 
@@ -143,7 +145,6 @@ class TestAnimation(Animation):
         dist = np.expand_dims(dist, -1)
         dt = t - self.pulse_time
         brightness = math.pow(0.94, 100 * dt)
-        color = np.array([.5,1,1]) * brightness
 
         self.struct.pixels[:,:] *= brightness
 
