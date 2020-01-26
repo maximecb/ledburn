@@ -10,17 +10,22 @@ from pyglet.window import mouse
 import structure
 import animations
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--anim", type=str, default='', help='test a specific animation')
+args = parser.parse_args()
+
 window = pyglet.window.Window(
     width=800,
     height=600,
     caption='LEDBurn Simulator'
 )
 
-#anim = animations.BasicStrobe(structure.cube)
-#anim = animations.PosiStrobe(structure.cube)
-#anim = animations.TestSequence(structure.cube)
-#anim = animations.TestAnimation(structure.cube)
-anim = animations.TestSequence(structure.cube)
+if args.anim:
+    anim_class = getattr(animations, args.anim)
+    anim = anim_class(structure.cube)
+else:
+    anim = animations.TestSequence(structure.cube)
+
 #anim = animations.RotoStrobe(structure.cube)
 
 # Time when the next beat should occur
@@ -135,7 +140,7 @@ def update(dt):
     anim.update(t)
 
     # Randomly pick the next animation
-    if num_beats % 20 == 0:
+    if num_beats % 20 == 0 and not args.anim:
         anim = animations.random_animation(structure.cube)
 
 pyglet.clock.schedule_interval(update, animations.UPDATE_TIME)

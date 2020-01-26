@@ -180,6 +180,8 @@ class RotoStrobe(Animation):
         #self.pos = np.array([0, 0, 0])
 
         self.light_dist = 1.5
+
+        self.rot_speed = 0.50
         self.rot_angle = 0
 
         # Rotation direction
@@ -192,8 +194,7 @@ class RotoStrobe(Animation):
     def update(self, t):
         m = rot_matrix([0, 1, 0], self.rot_angle)
         light_pos = np.matmul(np.array([self.light_dist, 0, 0]), m)
-        self.rot_angle += 0.45 if self.rot_dir else -0.45
-        #self.rot_angle += 0.45
+        self.rot_angle += self.rot_speed if self.rot_dir else -self.rot_speed
 
         dist = self.struct.poss - light_pos
         dist = np.linalg.norm(dist, axis=-1)
