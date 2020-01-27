@@ -35,7 +35,7 @@ def on_key_press(symbol, modifiers):
 
 @window.event
 def on_draw():
-
+    # Clear/erase everything
     glClearColor(0.0, 0.0, 0.0, 0.0)
     glClearDepth(1.0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -102,7 +102,6 @@ def draw_struct(struct):
             glVertex3f(*p)
 
     glEnd(GL_POINTS)
-
 
 def update(dt):
     global anim
