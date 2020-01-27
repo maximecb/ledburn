@@ -1,6 +1,7 @@
 import math
 import random
 import numpy as np
+from util import rot_matrix
 
 # Frequency at which animations are updated
 UPDATE_RATE = 30
@@ -46,10 +47,6 @@ class TestSequence(Animation):
     def update(self, t):
         # TODO: flash on first segment
         # We can add this later
-
-        # Should have directional movement
-        # Start with just going from one edge to another and iterating through the LEDs,
-        # in order
 
         edge = self.struct.edges[self.edge_idx]
 
@@ -135,16 +132,52 @@ class EdgeStrobe(Animation):
         color = np.array([1, 1, 1]) * brightness
         self.struct.pixels[self.cur_edge, :] = color
 
+class RotoStrobe(Animation):
+    """
+    Light source that rotates around the origin
+    """
+
+    def __init__(self, struct):
+        super().__init__(struct)
+
+        self.pulse_time = 0
+        #self.pos = np.array([0, 0, 0])
+
+        self.light_dist = 1.5
+        self.rot_angle = 0
+
+        # Rotation direction
+        self.rot_dir = True
+
+    def pulse(self, t):
+        self.pulse_time = t
+        self.rot_dir = not self.rot_dir
+
+    def update(self, t):
+        m = rot_matrix([0, 1, 0], self.rot_angle)
+        light_pos = np.matmul(np.array([self.light_dist, 0, 0]), m)
+        self.rot_angle += 0.45 if self.rot_dir else -0.45
+        #self.rot_angle += 0.45
+
+        dist = self.struct.poss - light_pos
+        dist = np.linalg.norm(dist, axis=-1)
+        dist = np.expand_dims(dist, -1)
+
+        dt = t - self.pulse_time
+        #brightness = math.pow(0.94, 100 * dt)
+        brightness = 1
+        color = np.array([1, 1, 1]) * brightness / (dist*dist)
+
+        self.struct.pixels = color
+
 # IDEA: selectively flash a subset of the edges in white or red
 # Ideally there should be some symmetry in the edge patterns
-# IDEA: multi-flash pattern that changes to the beat
 
 # Other animation ideas
 # - Colored strobe
 # - Positional strobe (based on distance to a point)
 # - Shooting star, random direction change at vertex
 # - Blood drops
-# - Point light rotating around the cube, direction changes with the beat
 # - Standing waves to the beat
 
 def reg_animations():

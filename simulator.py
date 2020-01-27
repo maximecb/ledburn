@@ -17,6 +17,7 @@ window = pyglet.window.Window(
 )
 
 anim = animations.TestSequence(structure.cube)
+#anim = animations.RotoStrobe(structure.cube)
 
 # Time when the next beat should occur
 next_beat = 0
