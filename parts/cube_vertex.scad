@@ -12,9 +12,15 @@ module edge()
         
         translate([0, 0, -1])
         cylinder(r=r, h=52, $fn=100);
-        
+ 
+        // Screw holes
         translate([0, 50, 37])
         rotate([90, 0, 0])
+        cylinder(r=2.25, h=100, $fn=100);
+
+        // Screw holes
+        translate([-50, 0, 37])
+        rotate([0, 90, 0])
         cylinder(r=2.25, h=100, $fn=100);
     }
 }
