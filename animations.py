@@ -9,6 +9,14 @@ UPDATE_RATE = 30
 # Time between each update (in seconds)
 UPDATE_TIME = 1 / UPDATE_RATE
 
+# Colors
+GREEN = np.array([0,1,0])
+BLUE = np.array([0,0,1])
+RED = np.array([1,0,0])
+YELLOW = np.array([1,1,0])
+CYAN = np.array([0,1,1])
+MAGENTA = np.array([1,0,1])
+
 class Animation:
     """
     Base class for all animations
@@ -125,16 +133,9 @@ class ColoredPosiStrobe(Animation):
 
     def pulse(self, t):
         self.pulse_time = t
-        green = np.array([0,1,0])
-        blue = np.array([0,0,1])
-        red = np.array([1,0,0])
-        yellow = np.array([1,1,0])
-        cyan = np.array([0,1,1])
-        magenta = np.array([1,0,1])
-        colors = [blue, cyan, magenta]
+        colors = [BLUE, CYAN, MAGENTA]
         color = colors[np.random.randint(0,3)]
         self.struct.pixels[:,:] = color
-
 
     def update(self, t):
         dist = self.struct.poss - self.pos
@@ -144,7 +145,6 @@ class ColoredPosiStrobe(Animation):
         brightness = math.pow(0.94, 100 * dt)
 
         self.struct.pixels[:,:] *= brightness
-
 
 class EdgeStrobe(Animation):
     """
