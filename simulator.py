@@ -26,8 +26,6 @@ if args.anim:
 else:
     anim = animations.TestSequence(structure.cube)
 
-#anim = animations.RotoStrobe(structure.cube)
-
 # Time when the next beat should occur
 next_beat = 0
 
@@ -137,11 +135,13 @@ def update(dt):
         print('Pulse! #{} tempo={:.1f} t={:.1f}'.format(num_beats, bpm, t))
         num_beats += 1
 
+        # Randomly pick the next animation
+        if num_beats % 20 == 0 and not args.anim:
+            anim = animations.random_animation(structure.cube)
+            print('Next animation:', anim.__class__.__name__)
+
     anim.update(t)
 
-    # Randomly pick the next animation
-    if num_beats % 20 == 0 and not args.anim:
-        anim = animations.random_animation(structure.cube)
 
 pyglet.clock.schedule_interval(update, animations.UPDATE_TIME)
 

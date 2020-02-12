@@ -223,8 +223,7 @@ class BloodDrops(Animation):
     def update(self, t):
         pass
 
-
-
+# IDEA: very fast random flashing of edges after each beat
 
 # IDEA: selectively flash a subset of the edges in white or red
 # Ideally there should be some symmetry in the edge patterns
