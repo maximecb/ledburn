@@ -223,6 +223,8 @@ class BloodDrops(Animation):
     def update(self, t):
         pass
 
+# IDEA: move a dot along every edge at once
+    
 # IDEA: very fast random flashing of edges after each beat
 
 # IDEA: selectively flash a subset of the edges in white or red
